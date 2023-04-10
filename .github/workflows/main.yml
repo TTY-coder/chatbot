@@ -1,9 +1,9 @@
 name: Build and Deploy to Firebase
 
-on:
+'on':
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -16,6 +16,8 @@ jobs:
         uses: actions/setup-node@master
       - name: Install Dependencies
         run: npm install
+      - name: Testing
+        run: npm test
       - name: Build
         run: npm run build --prod
       - name: Deploy
