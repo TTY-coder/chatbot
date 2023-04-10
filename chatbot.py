@@ -4,18 +4,29 @@ import configparser
 import logging
 import redis
 import os
+import datetime
+import os
+import random
 
+import certifi
+import firebase_admin
+from firebase_admin import db
+
+os.environ['SSL_CERT_FILE'] = certifi.where()
+cred_obj = firebase_admin.credentials.Certificate('c:/Users/ROG/Desktop/cloud computing/chatbot/7940.json')
+firebase_admin.initialize_app(cred_obj, {
+	'databaseURL':'https://project-699883704609295917-default-rtdb.firebaseio.com/',
+    'storageBucket':'project-699883704609295917.appspot.com'
+	})
+db_ref = db.reference('/')
+print(db_ref)
 
 def main():
 # Load your token and create an Updater for your Bot
-    #config = configparser.ConfigParser()
-    #config.read(r'C:\Users\ROG\Desktop\cloud computing\chatbot\config.ini')
-    updater = Updater(token=(os.environ['ACCESS_TOKEN']), use_context=True)
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    updater = Updater(token=('5624610325:AAF1Y0xRDCzscp7mHrLuPLQPGHWTbU8muYc'), use_context=True)
     dispatcher = updater.dispatcher
-
-    global redis1
-    redis1 = redis.Redis(host=(os.environ['HOST']), password=(os.environ['PASSWORD']), port=(os.environ['REDISPORT']))
-
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',level=logging.INFO)
     echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
     dispatcher.add_handler(echo_handler)
@@ -26,6 +37,15 @@ def main():
 
     updater.start_polling()
     updater.idle()
+    os.environ['SSL_CERT_FILE'] = certifi.where()
+    cred_obj = firebase_admin.credentials.Certificate('c:/Users/ROG/Desktop/cloud computing/chatbot/7940.json')
+    firebase_admin.initialize_app(cred_obj, {
+        'databaseURL':'https://project-699883704609295917-default-rtdb.firebaseio.com/',
+        'storageBucket':'project-699883704609295917.appspot.com'
+        })
+    db_ref = db.reference('/')
+    print(db_ref)
+
 def echo(update, context):
     reply_message = update.message.text.upper()
     logging.info("Update: " + str(update))
