@@ -1,0 +1,46 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: release
+
+on:
+  push:
+    branches: [ "main" ] # master 分支提交时触发
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go #配置GO 环境
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+
+    - name: Build # 编译项目
+      run: go build -v ./...
+
+    - name: 发布到阿里云
+      uses: easingthemes/ssh-deploy@v2.1.5
+      env:
+          #私钥
+          SSH_PRIVATE_KEY: ${{ secrets.ALIYUN_SERVER_PRIVATE_KEY }}
+          #SCp参数
+          ARGS: "-rltgoDzvO --delete"
+          #源目录
+          SOURCE: "./"
+          #服务器Ip:换成你的服务器iP
+          REMOTE_HOST:  ${{ secrets.ALIYUN_SERVER_HOST }}
+          #用户
+          REMOTE_USER: "root"
+          #目标地址
+          TARGET: "/root/university-selection_Backend"
+
+作者：Eric223
+链接：https://juejin.cn/post/7157193707693801508
+来源：稀土掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
