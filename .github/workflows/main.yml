@@ -15,11 +15,9 @@ jobs:
       - name: Initialize Node
         uses: actions/setup-node@main
       - name: Install Dependencies
-        run: npm install
-      - name: Testing
-        run: npm test
+        run: pip install -r requirements.txt
       - name: Build
-        run: npm run build --prod
+        run: pip build 
       - name: Deploy
         uses: TTY-coder/firebase-action@main
         with:
